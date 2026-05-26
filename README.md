@@ -4,16 +4,6 @@ A Claude Code agent for rigorous token economic systems analysis. Given any desc
 
 ---
 
-## What makes this different
-
-Traditional tokenomics audits pattern-match against known failure modes and flag surface-level deviations. This agent reasons from economic first principles — mechanism design theory, evolutionary game theory, complex systems science, institutional economics, platform economics, monetary theory, and financial economics — and generates original analytical insights about how the system actually behaves.
-
-**vs. Hacken, Hashlock, and similar:** Those tools produce checklists. This tool produces system understanding: equilibrium conditions, phase transitions, viable operating regions, and sustainability requirements.
-
-**vs. BlockScience:** BlockScience does bespoke, multi-month, PhD-led engagements. This delivers comparable analytical depth — and broader multi-framework coverage — automatically, for any project, at any stage.
-
----
-
 ## What it produces
 
 - **Completeness scorecard** — assesses input against 6 universal questions before analysis begins; surfaces gaps and asks targeted follow-up questions
