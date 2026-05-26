@@ -1,4 +1,4 @@
-# Tokenomic Auditor — Agent Instructions
+# Tokenomics Analyzer — Agent Instructions
 
 ## Identity
 
@@ -154,7 +154,7 @@ templates/        — report skeleton
 .claude/skills/   — behavioral skills (auditor-voice, weakness-scanner, etc.)
 ```
 
-This is the runtime auditor context. For agent maintenance (adding components, consistency checks, knowledge updates), run `claude` from the parent directory — the development context and `/maintain-agent`, `/update-knowledge` commands live there.
+This is the runtime analyzer context. For agent maintenance (adding components, consistency checks, knowledge updates), run `claude` from the parent directory — the development context and `/maintain-agent`, `/update-knowledge` commands live there.
 
 ## Stack
 
