@@ -2,7 +2,22 @@
 
 **Layer:** 0 (Foundation — active during Step 5: Simulate)
 
-**Purpose:** Governs simulation script generation. Ensures simulations are runnable, parameterized from `simulation_baselines.md`, and produce the required chart outputs.
+**Purpose:** Governs simulation script generation and interpretation. Ensures simulations are correctly parameterized, produce the required chart outputs, and that their results are interpreted through the correct analytical lenses — not just reported as chart descriptions.
+
+---
+
+## Generation Protocol
+
+Simulations are generated ad-hoc at runtime for each token. For every simulation step:
+
+1. **Read the reference template** from `simulations/templates/<script>.py`
+2. **Read the parsed TokenModel** YAML for this token
+3. **Generate a token-specific script**: copy the template, substitute the token's parameters into `PARAMS`, and adjust state update functions if the token has novel mechanisms that don't fit the template exactly
+4. **Save** to `simulations/<token-slug>/<script>.py`
+5. **Run** with `.venv/bin/python simulations/<token-slug>/<script>.py <token-slug> --model models/<token-slug>.yaml`
+6. **Interpret** the outputs (see Interpretation section below)
+
+The shared parameter loader (`simulations/utils.py`) handles YAML parsing and baseline defaults — every generated script imports it. Do not re-implement parameter loading in generated scripts.
 
 ---
 
@@ -174,3 +189,53 @@ if dilution_months:
     print(f"WARNING: Dilution events detected at months: {dilution_months}")
 ```
 Mark these months with red vertical lines on the supply chart.
+
+---
+
+## Simulation Interpretation
+
+Running simulations and producing charts is not the goal. The goal is understanding how the token system behaves. After running each script, interpret the outputs through the following lenses before writing the report.
+
+### emission.py — What to look for
+
+**Supply composition (supply.png):**
+- How much of total supply is freely circulating at launch vs. locked? Less than 10% circulating at launch with large locked categories = high future sell pressure risk.
+- When do the major vesting cliffs hit? Cliff months should be clearly visible as step changes in the locked→circulating transition. If team and investor cliffs coincide within the same quarter, that's compounded sell pressure.
+- Does circulating supply grow smoothly or in sudden jumps? Sudden jumps correspond to vesting events and create supply shocks.
+
+**Dilution chart (dilution.png):**
+- Any months above the 5% threshold are dilution events. Count them and note when the worst ones occur.
+- A cluster of dilution events in the first 18 months is a critical finding — the market has to absorb massive supply before organic demand has developed.
+- If max monthly dilution exceeds 10%, that's a structural design flaw regardless of when it occurs.
+
+**Mechanism design interpretation:**
+- High early dilution creates an adverse selection problem: only speculators expecting to exit before the dilution will buy at launch. Long-term holders face guaranteed loss from supply inflation. The incentive structure actively selects against the participants the protocol needs.
+- Vesting cliff alignment (team + investors unlocking simultaneously) is a coordination failure baked into the supply schedule — it creates a predictable exit window that rational insiders will exploit.
+
+### monte_carlo.py — What to look for
+
+**Price bands (price_bands.png):**
+- The gap between P10 and P90 measures uncertainty. A very wide band means the model is highly sensitive to demand assumptions — neither optimistic nor pessimistic projections are reliable.
+- If the P50 (median path) in the Base scenario declines toward zero within 36 months, the model is fundamentally unsound even under moderate conditions.
+- The near-zero percentage in the summary output is the most important single number: what fraction of paths end in effective collapse by month 36? Above 20% in Base = critical risk. Above 50% in Bear = structural fragility.
+- Compare Base vs. Bear vs. Stress P50 paths: how much does adverse conditions change the median outcome? A robust model shows a meaningful but survivable gap. A fragile model shows Bear P50 near zero while Base P50 is healthy — this discontinuity indicates the model has no resilience margin.
+
+**Dilution headwind interaction:**
+- The Monte Carlo uses the dilution series from emission.py as a price headwind. When both simulations are available, the combined picture is more informative than either alone: high dilution + high price uncertainty = near-certain value destruction in all but the most optimistic paths.
+
+**Monetary theory interpretation:**
+- The quantity theory analog: if circulating supply grows 5× over 3 years but demand (TVL, users, revenue) doesn't grow proportionally, the implied token price must fall by ~5×. The Monte Carlo formalizes this — the dilution headwind encodes the monetary policy of the protocol.
+
+### sensitivity.py — What to look for
+
+**Heatmaps (sensitivity_heatmap.png):**
+- Where is the current token's parameter position relative to the viable zone (green contour)? If it's inside, the model has margin. If it's on the edge, small adverse changes push it into instability. If it's outside, the current design is already in the danger zone.
+- Which parameter axis drives outcomes more? The steeper the gradient in one direction, the more sensitive the system is to that parameter. A near-horizontal gradient in one direction means that parameter doesn't matter much.
+
+**Equilibrium map (equilibrium_map.png):**
+- What fraction of the parameter space is viable? Less than 10% viable means the protocol only works under a narrow set of conditions — small deviations break it. This is high structural fragility.
+- Is the viable zone centered near the current parameters, or is it far away? A viable zone far from current parameters means the protocol would need to redesign, not just tune.
+
+**Complex systems interpretation:**
+- Sensitivity analysis reveals phase transitions: parameter combinations where system behavior changes qualitatively (stable → unstable). The boundary of the viable zone IS the phase transition boundary. If the current token is near that boundary, it's operating in a sensitive region where small shocks can trigger qualitative state changes — the defining characteristic of systems vulnerable to rapid collapse.
+- A small viable region suggests the protocol lacks robustness to perturbation — an evolutionarily unstable strategy that will be outcompeted or destabilized under real market conditions.
