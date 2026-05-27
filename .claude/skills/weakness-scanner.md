@@ -27,9 +27,9 @@ Do not reorder. Do not skip ahead to "obvious" findings. The checklist exists pr
 
 For every check in `red_flags_master.md`, do this:
 
-1. **Look up the YAML field** using `field_to_flag_map.md`
+1. **Look up the YAML Fields column** in the `red_flags_master.md` table for that check
 2. **Retrieve the value** from the parsed TokenModel
-3. **Apply the threshold** from the map
+3. **Apply the threshold** from the table
 4. **Decision:** triggered or not triggered
 5. If triggered: create a finding. If not triggered: record a silent pass (no output needed unless helpful for transparency)
 

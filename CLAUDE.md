@@ -69,22 +69,14 @@ Generate Python simulation scripts and run them. Save all outputs (CSV, charts) 
 | Condition | Scripts to generate and run |
 |---|---|
 | Always | `emission.py`, `monte_carlo.py`, `sensitivity.py` |
-| Staking mechanism present | `staking.py`, `death_spiral.py` |
-| Utility or payment token | `velocity.py` |
-| Multi-actor system (validators, LPs, stakers, speculators) | `agents.py` |
-| Algorithmic stablecoin or reflexive mechanism | `death_spiral.py` (run first) |
-| Governance token or on-chain voting mechanics present | `governance_sim.py` |
-| Token value depends on network effects or user adoption (platform, marketplace, social) | `adoption_curve.py` |
-| GameFi token (p2e-currency, gaming-governance, virtual-economy archetypes) | `player_economy.py` |
+| Staking mechanism present OR algorithmic stablecoin | `death_spiral.py` |
+
+Scripts not yet built (pending): `staking.py`, `velocity.py`, `agents.py`, `governance_sim.py`, `adoption_curve.py`, `player_economy.py`. Skip those conditions until templates exist.
 
 After simulation: if death spiral triggers under the standard bear scenario (−80% price over 6 months), apply a one-tier grade downgrade per `scoring_rubric.md`.
 
-### Step 6 — Spreadsheet
-Generate an Excel model using `openpyxl`. Save to `analysis/<token-name>/<token-name>_model.xlsx`. The model must include:
-- Supply schedule tab: total supply, circulating, staked, locked over 120 months
-- Treasury tab: treasury runway under Base, Bear, and Stress scenarios
-- Vesting tab: month-by-month unlock schedule per allocation category with dilution events flagged (>5% monthly new supply)
-- Revenue tab: protocol revenue projections and fee yield vs. staking APY
+### Step 6 — Spreadsheet *(optional — generate_model.py not yet built)*
+When available: generate an Excel model using `openpyxl`. Save to `analysis/<token-name>/<token-name>_model.xlsx`. Required tabs: supply schedule, vesting schedule, treasury runway (Base/Bear/Stress), revenue projections. Skip this step if `simulations/templates/generate_model.py` does not exist.
 
 ### Step 7 — Report
 Write the full analysis report using `templates/report_template.md` as the skeleton. See **Report Quality Standards** below. Save to `reports/<token-name>_audit.md`.
@@ -158,4 +150,4 @@ This is the runtime analyzer context. For agent maintenance (adding components, 
 
 ## Stack
 
-Python: cadCAD, Mesa, pandas, numpy, matplotlib, scipy, openpyxl, plotly, jinja2, pyyaml
+Python (installed): numpy, pandas, matplotlib, scipy, openpyxl, pyyaml
