@@ -2,7 +2,7 @@
 
 This guide helps you prepare your token model for a rigorous economic analysis. The more clearly you describe your system, the more concrete and actionable the results will be.
 
-You can submit in any format: prose, bullet points, a whitepaper section, a spreadsheet, or a combination. The analyzer will parse what you provide. You don't need to fill out a form.
+You can submit in any format: prose, bullet points, a whitepaper section, a spreadsheet, or a combination. We will parse what you provide. You don't need to fill out a form.
 
 ---
 
@@ -16,11 +16,9 @@ Before describing any tokenomics, describe what your protocol actually does.
 - How does the protocol generate activity? What drives usage?
 - Is the protocol live? If so, what does current usage look like?
 
-This context is not optional background — it is the foundation of the analysis. Token mechanics that look broken in isolation often make sense within a specific system, and vice versa. The analysis cannot properly assess incentive alignment, demand drivers, or sustainability without understanding what the protocol is actually trying to do.
-
 ---
 
-## Then describe the token's role in the system
+## Describe the token's role in the system
 
 Once the system is clear, explain how the token fits into it:
 
@@ -31,9 +29,9 @@ Once the system is clear, explain how the token fits into it:
 
 ---
 
-## Key specifics the analysis needs
+## Key specifics
 
-The following details are required for quantitative analysis. Provide them alongside your system description — in whatever order makes sense for your model.
+Provide the following details alongside your system description — in whatever order makes sense for your model.
 
 **Supply and distribution**
 - Total supply (or state if uncapped)
@@ -65,8 +63,8 @@ The following details are required for quantitative analysis. Provide them along
 
 ## A few things to be explicit about
 
-**What's live vs. planned.** Clearly distinguish mechanics that exist today from ones on the roadmap. Planned mechanics cannot be analyzed as if they are in effect.
+**What's live vs. planned.** Clearly distinguish mechanics that exist today from ones on the roadmap. 
 
-**Where you have unknowns.** If a number isn't finalized yet, say so rather than omitting it. The analysis handles unknowns gracefully — it will flag them and make conservative assumptions. Omissions are harder to work with than stated gaps.
+**Where you have unknowns.** If a number isn't finalized yet, say so rather than omitting it. T
 
-**Don't soften weaknesses.** The analysis will surface design risks regardless. Flagging a known weakness upfront gets you a more useful fix proposal than having it discovered and reported without context.
+**Don't soften weaknesses.** Flagging a known weakness upfront gets you a more useful fix proposal than having it discovered and reported without context.
