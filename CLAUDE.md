@@ -57,8 +57,19 @@ Open `knowledge/red_flags_master.md`. Run every check from C-01 through I-05 in 
 - The specific model field(s) and value(s) that triggered it
 - A concrete fix proposal (required for Critical and High; recommended for Medium)
 
+As you evaluate each check, append one line to `analysis/<token-name>/scan_trace.md`:
+```
+C-01 | supply.collateral_type = "native" | TRIGGERED
+H-04 | vesting.investors.cliff_months = 6 | NOT TRIGGERED
+```
+Format: `<FLAG_ID> | <yaml.field> = <value> | TRIGGERED` or `NOT TRIGGERED`. One line per flag, all 51, in order. This file is required — do not omit it.
+
 **4b. Death Spiral Count**
-Open `knowledge/failure_postmortems.md`, section "Death Spiral Checklist." Check all 10 conditions against the parsed model. Count how many are simultaneously true. Record the count — it feeds directly into grading.
+Open `knowledge/failure_postmortems.md`, section "Death Spiral Checklist." Check all 10 conditions against the parsed model. Count how many are simultaneously true. Record the count — it feeds directly into grading. Append 10 lines to `scan_trace.md` in the same format:
+```
+DS-01 | endogenous_collateral_pct = 0% | NOT TRIGGERED
+DS-06 | runway_months = 8 | TRIGGERED
+```
 
 **4c. Grade Assignment**
 Open `knowledge/scoring_rubric.md`. First check all Grade F automatic disqualifiers. If any apply, grade is F — stop. Otherwise, determine the highest applicable grade (A through D) using the finding counts and death spiral count. Then check for simulation-based adjustments (Step 5 may trigger a downgrade).
@@ -123,6 +134,7 @@ The executive summary must state the grade and justify it in one sentence refere
 | Artifact | Location |
 |---|---|
 | Parsed model | `models/<token-name>.yaml` |
+| Scan trace (required) | `analysis/<token-name>/scan_trace.md` |
 | Simulation scripts | `simulations/<token-name>/` |
 | Simulation outputs (CSV, charts) | `analysis/<token-name>/` |
 | Excel model | `analysis/<token-name>/<token-name>_model.xlsx` |
