@@ -1,0 +1,165 @@
+# TokenModel: NRG (Holoverse)
+# Parsed from: NRG-Token-Audit-Submission.md
+# Date: 2026-05-28
+
+token:
+  name: Holoverse NRG
+  symbol: NRG
+  tagline: Native token of Holoverse — a Web3 game where players own, evolve, and sustain unique universes as living NFT assets
+  archetypes:
+    - utility
+    - currency
+  chain: Arbitrum One
+  launch_stage: concept  # Pre-launch; contracts written and in test; no mainnet activity
+
+supply:
+  total_supply: -1              # Uncapped; no hard ceiling on lifetime total
+  uncapped: true
+  premine_total: 10000000       # All pre-mine NRG (non-emission source)
+  initial_circulating: 1500000  # 15% of pre-mine (community/TGE liquidity), fully unlocked at TGE
+  emission_schedule: dynamic    # Adaptive: Max(BaseFloor, Min(HardCap, 1.2 × 7-day-rolling-avg-daily-burn))
+  emission_daily_base_floor: 5000   # NRG/day minimum emission
+  emission_daily_hard_cap: 50000    # NRG/day maximum emission
+  emission_adaptive_multiplier: 1.2 # Targets mild net inflation during growth
+  emission_lookback_days: 7         # Rolling average window
+  emission_rate_annual_pct: 182.5   # At Hard Cap: 18,250,000/10,000,000 pre-mine; actual will be lower
+  burn_mechanism: multi-mechanism
+  burn_rate_estimate: >
+    Multiple burn mechanisms: (1) 90% of NRG paid at universe mint is burned permanently;
+    (2) maintenance burn by stage: Cosmic 1/day, Biological 4/day, Social 12/day,
+    Transcendent 30/day; (3) evolution burn: 0.1–200 NRG per gameplay action continuously;
+    (4) NPC transfer tax: 5% of all owner-to-NPC NRG transfers permanently burned.
+    Illustrative equilibrium at 2,000 active universes: ~12,300 NRG/day total burn.
+
+distribution:  # All percentages are of the 10,000,000 NRG pre-mine
+  team_pct: 20         # 2,000,000 NRG; 12-month cliff, 36-month linear vesting
+  investors_pct: 15    # 1,500,000 NRG; 6-month cliff, 24-month linear vesting
+  ecosystem_pct: 25    # 2,500,000 NRG; no cliff, milestone-gated releases
+  community_pct: 15    # 1,500,000 NRG; fully unlocked at TGE (bootstrap liquidity)
+  treasury_pct: 25     # 2,500,000 NRG; no cliff, multisig-governed
+  other_pct: 0
+  notes: >
+    Percentages are of the 10,000,000 NRG pre-mine only. All future supply comes from
+    the epoch emission engine. No fundraise has occurred; investor_pct is provisional.
+
+vesting:
+  team:
+    cliff_months: 12
+    duration_months: 36   # Linear vesting begins month 12; fully vested month 48
+  investors:
+    cliff_months: 6
+    duration_months: 24   # Linear vesting begins month 6; fully vested month 30
+  ecosystem:
+    cliff_months: 0
+    duration_months: unknown  # Milestone-gated; no fixed schedule
+  treasury:
+    cliff_months: 0
+    duration_months: unknown  # Multisig-governed; no automatic release
+  notes: >
+    No fundraise completed; investor vesting schedule is provisional.
+    No on-chain vesting contracts deployed.
+
+utility:
+  use_cases:
+    - required-minting       # Minting a Universe NFT requires NRG (no alternative path)
+    - required-maintenance   # Daily maintenance burn required to hold universe stage
+    - evolution-burn         # NRG burned continuously through gameplay complexity actions
+    - medium-of-exchange     # NRG is the universal exchange medium across all universes
+  staking:
+    enabled: false
+    reward_source: none
+    lock_period_days: 0
+    slashing: false
+    unbonding_period_days: 0
+  governance:
+    enabled: true
+    voting_mechanism: >
+      Phase I (months 1-2): Deployer EOA.
+      Phase II-III (months 2-4): 3-of-5 Gnosis Safe, no timelock.
+      Phase IV-V (months 4-5): Snapshot off-chain proposals + 3-of-5 Safe execution.
+      Phase VI (month 6+): OpenZeppelin Governor on-chain, 48-hour timelock.
+    quorum_pct: 4      # Phase VI: 4% of circulating for parameter changes; 10% for treasury withdrawals >10%
+    timelock_days: 2   # Phase VI: 48-hour timelock
+    proposal_threshold: unknown
+  fee_payment:
+    enabled: true
+    fee_sink: mixed    # 90% of mint NRG burned; 10% to treasury; 5% NPC transfer tax burned
+
+economics:
+  protocol_revenue_sources:
+    - universe_mint_usdc_fee   # $10 USDC per universe mint → treasury
+    - universe_mint_nrg_fee    # 10% of NRG paid at mint → treasury (90% burned)
+  annual_revenue_usd: 5000   # Year 1 conservative: 500 mints × $10 USDC; NRG portion at unknown price
+  fee_rate_bps: -1           # Not a standard fee rate; per-action burn varies
+  value_accrual_to_token: mixed  # Deflationary burn (90% mint NRG, NPC tax) + treasury accumulation
+  demand_drivers:
+    - required_for_minting        # Must hold/buy NRG to mint a Universe NFT
+    - required_for_maintenance    # Daily burn obligation forces ongoing NRG acquisition
+    - required_for_evolution      # Continuous burn through gameplay
+    - npc_labor_payments          # NPC player earnings denominated in NRG
+  velocity_sinks:
+    - maintenance_burn            # Daily stage-dependent burn creates sustained sell pressure
+    - evolution_burn              # Continuous gameplay burn removes tokens from circulation
+    - npc_transfer_tax_burn       # 5% of NPC payments permanently burned
+    - mint_burn                   # 90% of mint NRG burned at universe creation
+  treasury:
+    size_usd: 0           # Pre-launch; no mainnet activity; $0 stablecoins at TGE
+    composition: native-only  # 2,500,000 NRG (pre-mine); USDC accumulates from post-TGE mints
+    monthly_burn_usd: 19000   # ~$15K team/contractors + $500 infra + $1.5K legal + $2K audits amortized
+
+competitive:
+  comparable_protocols:
+    - Axie Infinity (AXS/SLP)
+    - The Sandbox (SAND)
+    - Illuvium (ILV)
+    - Star Atlas (ATLAS/POLIS)
+  differentiation: >
+    Single-token design avoids AXS/SLP sink-source imbalance; adaptive burn-linked emission
+    formula provides counter-cyclical protection absent in most P2E tokens; mandatory
+    maintenance burns force continuous token demand regardless of market price;
+    no passive staking yield removes mercenary capital attractor.
+
+novel_mechanisms:
+  - name: adaptive_emission_formula
+    description: >
+      DailyEmission = Max(BaseFloor, Min(HardCap, 1.2 × 7-day-rolling-average-daily-burn)).
+      Targets mild net inflation during growth phases. Counter-cyclical: when burn falls,
+      emission falls toward BaseFloor. BaseFloor (5,000/day) prevents zero-reward death
+      spiral but creates floor inflation even in no-activity scenarios.
+  - name: stage_dependent_maintenance_burn
+    description: >
+      Universe owners burn NRG daily to hold their universe at current stage.
+      Missing a payment causes immediate one-stage regression. Rates escalate exponentially:
+      Cosmic 1/day → Biological 4/day → Social 12/day → Transcendent 30/day.
+      This creates a committed daily burn pressure that scales with the protocol's success.
+  - name: composite_proof_of_activity
+    description: >
+      Emission distributed by RawScore = 0.40×PM_norm + 0.25×UMI_norm + 0.35×CS_norm.
+      Player-Minutes (PM), Unique Meaningful Interactions (UMI), Complexity Score (CS).
+      Per-universe cap: 3% of epoch emissions. Computed off-chain by simulation service,
+      submitted on-chain via merkle roots. Oracle controlled by deployer (W4 risk).
+  - name: npc_labor_market
+    description: >
+      Universe owners set NPC split percentage (minimum 10% intended but not yet enforced
+      on-chain). NPC players earn a share of owner's epoch emissions. Creates a two-sided
+      labor market incentivizing both quality universe creation and active participation.
+
+risks_stated_by_team:
+  - W1: Deployer holds MINTER_ROLE until Phase IV (month 4); can mint unlimited NRG
+  - W2: Emission parameters (BaseFloor, HardCap, multiplier, lookback) are provisional and untested
+  - W3: HoloverseTreasury.sol is single-owner vault with no timelock — deployer can drain instantly
+  - W4: Proof of Activity oracle is off-chain, not yet built, controlled by deployer
+  - W5: NPC split floor (10%) not yet implemented in contracts; Universe.sol allows 0% split
+  - W6: Evolution burn sink defined but not implemented on-chain; advanceStage() is a no-cost stub
+  - W7: Supply allocation and vesting schedules are provisional; no fundraise completed
+
+additional_notes: >
+  Contracts: NrgToken.sol (ERC-20, burnable, MINTER_ROLE gated), Universe.sol (ERC-721),
+  HoloverseTreasury.sol (Ownable vault), MockUSDC.sol (testnet only).
+  Toolchain: Hardhat + TypeScript, OpenZeppelin v5, pnpm workspaces.
+  12/12 unit tests passing. Testnet deploy is next step.
+  Universe mint cost: 100 NRG total (90 burned, 10 to treasury) + $10 USDC.
+  Per-universe emission cap: 3% of epoch pool (max 150 NRG/day at BaseFloor,
+  1,500 NRG/day at HardCap).
+  IEV_factor (Social/Transcendent): 1 + min(0.50, epoch_NRG_commerce_volume / 1,000).
+  No DEX liquidity plan disclosed in submission.
